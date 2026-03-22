@@ -1,27 +1,26 @@
-# Proyecto: Todo List en TypeScript con Docker
+## Proyecto: Todo List Full Stack (TypeScript + JSON Server + Web)
 
-## Descripción
+##  Descripción
 
-Este proyecto consiste en el desarrollo de una aplicación de consola utilizando **TypeScript** para la gestión de tareas (Todo List)
+Este proyecto consiste en el desarrollo de una aplicación de gestión de tareas (*Todo List*) implementada en múltiples niveles:
 
-La aplicación permite:
+* Aplicación de consola con **TypeScript**
+* API REST simulada con **json-server**
+* Interfaz web con **HTML, CSS y JavaScript (fetch API)**
 
-* Crear tareas
-* Consultar tareas
-* Marcar tareas como completadas
-* Eliminar tareas completadas
-* Obtener estadísticas de las tareas
-
-El proyecto se ejecuta dentro de un contenedor Docker, lo que permite un entorno controlado y reproducible.
+El proyecto está basado en el ejercicio del libro (*Marking Tasks Complete*) y extendido para incluir persistencia y comunicación cliente-servidor.
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
-* TypeScript
-* Node.js
-* Docker
-* JavaScript (compilado desde TypeScript)
+* **TypeScript**
+* **Node.js**
+* **Docker**
+* **JSON Server**
+* **HTML5**
+* **CSS3**
+* **JavaScript (Fetch API)**
 
 ---
 
@@ -30,109 +29,141 @@ El proyecto se ejecuta dentro de un contenedor Docker, lo que permite un entorno
 ```
 proyecto-ts-docker/
 │
-├── src/
+├── src/                  # Código TypeScript (CLI)
 │   ├── index.ts
 │   ├── todoItem.ts
-│   └── todoCollection.ts
+│   ├── todoCollection.ts
+│   └── jsonTodoCollection.ts
 │
-├── dist/
+├── dist/                 # Código compilado
+│
+├── web/                  # Aplicación web
+│   ├── index.html
+│   ├── script.js
+│   ├── styles.css
+│   └── db.json           # Base de datos usada por json-server
+│
 ├── package.json
-├── package-lock.json
-└── tsconfig.json
+├── tsconfig.json
+└── README.md
+```
+
+---
+##  Instalación
+
+### 1. Clonar repositorio
+
+```
+git clone 
+cd proyecto-ts-docker
 ```
 
 ---
 
-## Instalación y ejecución
+### 2. Instalar dependencias
 
-### 1. Crear el contenedor Docker
-
-```bash
-docker run -dit \
---name ts-container \
--v $(pwd):/app \
--w /app \
-node:18-alpine sh
 ```
-
-### 2. Acceder al contenedor
-
-```bash
-docker exec -it ts-container sh
-```
-
-### 3. Instalar dependencias
-
-```bash
-npm init -y
-npm install typescript
-npx tsc --init
+npm install
 ```
 
 ---
 
-## Ejecución del proyecto
+### Ejecución del proyecto
 
-### Compilar el código
+---
 
-```bash
+### 1. Ejecutar aplicación TypeScript (CLI)
+
+```
 npx tsc
-```
-
-### Ejecutar la aplicación
-
-```bash
 node dist/index.js
 ```
 
----
+Funcionalidades:
 
-## Funcionalidades principales
-
-### Modelo de datos
-
-Se implementa la clase `TodoItem`, que representa una tarea con:
-
-* ID
-* Descripción
-* Estado (completa/incompleta)
-
-### Colección de tareas
-
-Se implementa la clase `TodoCollection`, que permite:
-
-* Agregar tareas (`addTodo`)
-* Obtener tareas (`getTodoItems`)
-* Buscar por ID (`getTodoById`)
-* Marcar como completada (`markComplete`)
-* Eliminar tareas completadas (`removeComplete`)
-* Obtener estadísticas (`getItemCounts`)
+* Menú interactivo (Inquirer)
+* Agregar tareas
+* Marcar como completadas
+* Eliminar tareas
+* Persistencia en archivo JSON
 
 ---
 
-## Operaciones CRUD implementadas
-
-| Operación | Método         |
-| --------- | -------------- |
-| Create    | addTodo        |
-| Read      | getTodoItems   |
-| Update    | markComplete   |
-| Delete    | removeComplete |
-
----
-
-## Ejemplo de salida
+### 2. Levantar API (JSON Server)
 
 ```
-Adam's Todo List (3 items to do)
-1   Buy Flowers
-2   Get Shoes
-3   Collect Tickets
-4   Call Joe   (complete)
+npx json-server --watch web/db.json --port 3000
 ```
 
+Endpoints disponibles:
+
+| Método | Endpoint   |
+| ------ | ---------- |
+| GET    | /tasks     |
+| POST   | /tasks     |
+| PATCH  | /tasks/:id |
+| DELETE | /tasks/:id |
+
+---
+
+### 3. Pruebas con Postman
+
+Se utilizó **Postman** para probar las operaciones CRUD:
+
+* Obtener tareas
+* Crear nuevas tareas
+* Actualizar estado
+* Eliminar tareas
+
+---
+
+### 4. Ejecutar aplicación web
+
+Abrir el archivo:
+
+```
+web/index.html
+```
+
+Funcionalidades:
+
+* Mostrar lista de tareas
+* Agregar tareas
+* Marcar como completadas
+* Eliminar tareas
+* Comunicación con API mediante `fetch`
+
+---
+
+## Operaciones CRUD
+
+| Operación | Implementación    |
+| --------- | ----------------- |
+| Create    | POST /tasks       |
+| Read      | GET /tasks        |
+| Update    | PATCH /tasks/:id  |
+| Delete    | DELETE /tasks/:id |
+
+---
+
+## Aprendizajes
+
+Durante este proyecto se aplicaron los siguientes conceptos:
+
+* Programación orientada a objetos con TypeScript
+* Uso de clases y tipado fuerte
+* Persistencia de datos con JSON
+* Creación de APIs REST simuladas
+* Consumo de APIs con Fetch
+* Manejo de peticiones HTTP
+* Separación frontend/backend
+* Uso de Docker para entornos de desarrollo
+
+---
 
 ## Notas importantes
 
-* No se deben modificar los archivos dentro de la carpeta `dist`, ya que son generados automáticamente.
-* El archivo `package-lock.json` se mantiene para asegurar la consistencia de dependencias.
+* El archivo `db.json` debe estar en la carpeta `web/`
+* JSON Server debe estar corriendo para que la web funcione
+* No modificar la carpeta `dist/` manualmente
+* Se recomienda usar `npx` para evitar problemas de permisos

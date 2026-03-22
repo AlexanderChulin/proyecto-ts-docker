@@ -6,8 +6,13 @@
     "build": "tsc",
     "start": "node dist/index.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "inquirer": "^6.3.1",
+    "lowdb": "^1.0.0"
+  },
   "devDependencies": {
+    "@types/inquirer": "^9.0.9",
+    "@types/lowdb": "^1.0.15",
     "typescript": "^5.0.0"
   }
 }
